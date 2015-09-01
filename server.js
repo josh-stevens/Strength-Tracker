@@ -30,6 +30,7 @@ app.use(session({secret: 'anystringoftext',
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(express.static('public'));
 
 
 
@@ -44,7 +45,7 @@ app.set('view engine', 'ejs');
 //  console.log(req.session);
 // });
 
-require('./app/routes.js')(app, passport);
+require('./app/routes.js')(app, passport, connection);
 
 app.listen(port);
 console.log('Server running on port: ' + port);

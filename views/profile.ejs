@@ -2,19 +2,86 @@
 <!doctype html>
 <html>
 <head>
-  <title>Node Authentication</title>
+  <title>Strength Tracker</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <style>
     body    { padding-top:80px; word-wrap:break-word; }
+
+    path {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+    }
+ 
+    line {
+      stroke: black;
+    }
+ 
+    text {
+      font-family: Arial;
+      font-size: 9pt;
+    }
+    
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+  <script src="/controller.js"></script>
 </head>
-<body>
+<body ng-app="strengthTracker">
 <div class="container">
 
   <div class="page-header text-center">
-    <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+    <h1><span class="fa fa-line-chart"></span> Strength Tracker</h1>
     <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+  </div>
+
+  <div class="row" ng-controller="strengthTrackerCtrl">
+    <div class="col-md-9">
+      <div class="well" id="chart">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="well" id="input">
+        <form>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input class="form-control" id="date" ng-model="date" type="date" required>
+          </div>
+          <div class="form-group">
+            <label for="exercise">Exercise</label>
+            <input class="form-control" id="exercise" ng-model="exercise" required>
+          </div><br>
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" id="basic-addon1">Set 1</span>
+            <input class="form-control" id="weight1" ng-model="weight1" placeholder="Weight" aria-describedby="basic-addon1">
+            <input class="form-control" id="reps1" ng-model="reps1" placeholder="Reps" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" id="basic-addon2">Set 2</span>
+            <input class="form-control" id="weight2" ng-model="weight2" placeholder="Weight" aria-describedby="basic-addon2">
+            <input class="form-control" id="reps2" ng-model="reps2" placeholder="Reps" aria-describedby="basic-addon2">
+          </div>
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" id="basic-addon3">Set 3</span>
+            <input class="form-control" id="weight3" ng-model="weight3" placeholder="Weight" aria-describedby="basic-addon3">
+            <input class="form-control" id="reps3" ng-model="reps3" placeholder="Reps" aria-describedby="basic-addon3">
+          </div>
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" id="basic-addon4">Set 4</span>
+            <input class="form-control" id="weight4" ng-model="weight4" placeholder="Weight" aria-describedby="basic-addon4">
+            <input class="form-control" id="reps4" ng-model="reps4" placeholder="Reps" aria-describedby="basic-addon4">
+          </div>
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" id="basic-addon5">Set 5</span>
+            <input class="form-control" id="weight5" ng-model="weight5" placeholder="Weight" aria-describedby="basic-addon5">
+            <input class="form-control" id="reps5" ng-model="reps5" placeholder="Reps" aria-describedby="basic-addon5">
+          </div><br>
+          <button ng-click="newWorkout(<%= user.id %>)">Submit</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <div class="row">

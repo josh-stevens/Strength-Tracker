@@ -12,7 +12,7 @@ module.exports = function(passport, connection) {
   });
 
   passport.deserializeUser(function(id, done) {
-    connection.query("SELECT * FROM users WHERE id = " + id , function(err,rows){ 
+    connection.query("SELECT * FROM users WHERE id = ?", [id], function(err,rows){ 
       done(err, rows[0]);
     });
   });
@@ -83,7 +83,7 @@ module.exports = function(passport, connection) {
     },
     function(accessToken, refreshToken, profile, done) {
         process.nextTick(function(){
-          connection.query("SELECT * FROM `users` WHERE `email` = ?", [profile.emails[0].value], function(err, rows){
+          connection.query("SELECT * FROM `users` WHERE `facebook_email` = ?", [profile.emails[0].value], function(err, rows){
             if(err)
               return done(err);
             if(rows.length)
