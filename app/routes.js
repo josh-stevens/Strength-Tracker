@@ -39,12 +39,63 @@ module.exports = function(app, passport, connection){
     res.redirect('/');
   });
 
-  app.get('/api/db', function(req, res) {
+  app.get('/api/db', isLoggedIn, function(req, res) {
+    connection.query("SELECT * FROM workouts WHERE uid=? ORDER BY day;", req.user.id, function(err, rows) {
 
+      // Build our response to be digestible by d3
+
+      var load = {};
+
+      for (var i = 0; i < rows.length; i++) {
+
+        // Grab load for each set, only if it exists
+        if (rows[i].set1_reps !== null && rows[i].set1_weight !== null) {
+          var set1 = rows[i].set1_reps * rows[i].set1_weight;
+        } else  {
+          var set1 = 0;
+        }
+
+        if (rows[i].set2_reps !== null && rows[i].set2_weight !== null) {
+          var set2 = rows[i].set2_reps * rows[i].set2_weight;
+        } 
+        else {
+          var set2 = 0;
+        }
+
+        if (rows[i].set3_reps !== null && rows[i].set3_weight !== null) {
+          var set3 = rows[i].set3_reps * rows[i].set3_weight;
+        } else {
+          var set3 = 0;
+        }
+
+        if (rows[i].set4_reps !== null && rows[i].set4_weight !== null) {
+          var set4 = rows[i].set4_reps * rows[i].set4_weight;
+        } 
+        else {
+          var set4 = 0;
+        }
+
+        if (rows[i].set5_reps !== null && rows[i].set5_weight !== null) {
+          var set5 = rows[i].set5_reps * rows[i].set5_weight;
+        } 
+        else {
+          var set5 = 0;
+        }
+
+        var day = rows[i].day;
+
+        // Set key in load object to equal the date part of the day string, then calculate the total load
+        // and set it as the value of that key
+
+        load[day.toString().slice(4,15)] = set1+set2+set3+set4+set5;
+      }
+      res.send(load);
+    });
   });
 
-  app.post('/api/db', function(req, res) {
-    console.log(req.body);
+  app.post('/api/db', isLoggedIn, function(req, res) {
+    // For some reason the data is coming back as a stringified key in the body object....
+    // So parse the key
     for (var key in req.body) {
       var body = JSON.parse(key);
     }
